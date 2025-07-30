@@ -4,11 +4,7 @@
  */
 
 import assert from 'assert'
-import {
-    contextValueStateMachine,
-    StateMachineNode,
-    StepFunctionsNode,
-} from '../../../stepFunctions/explorer/stepFunctionsNodes'
+import { StateMachineNode, StepFunctionsNode } from '../../../stepFunctions/explorer/stepFunctionsNodes'
 import {
     assertNodeListOnlyHasErrorNode,
     assertNodeListOnlyHasPlaceholderNode,
@@ -56,7 +52,7 @@ describe('StepFunctionsNode', function () {
             assert.ok(node instanceof StateMachineNode, 'Expected child node to be StateMachineNode')
             assert.strictEqual(
                 node.contextValue,
-                contextValueStateMachine,
+                StateMachineNode.contextValueStateMachine,
                 'expected the node to have a State Machine contextValue'
             )
         }

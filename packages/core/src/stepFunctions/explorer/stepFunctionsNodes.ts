@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as os from 'os'
 import * as nls from 'vscode-nls'
 const localize = nls.loadMessageBundle()
 
@@ -11,15 +10,15 @@ import * as StepFunctions from '@aws-sdk/client-sfn'
 import * as vscode from 'vscode'
 import { StepFunctionsClient } from '../../shared/clients/stepFunctions'
 
-import { AWSResourceNode } from '../../shared/treeview/nodes/awsResourceNode'
 import { AWSTreeNodeBase } from '../../shared/treeview/nodes/awsTreeNodeBase'
 import { PlaceholderNode } from '../../shared/treeview/nodes/placeholderNode'
 import { makeChildrenNodes } from '../../shared/treeview/utils'
 import { toArrayAsync, toMap, updateInPlace } from '../../shared/utilities/collectionUtils'
 import { listStateMachines } from '../../stepFunctions/utils'
-import { getIcon } from '../../shared/icons'
+import { StateMachineNode } from './stateMachineNode'
 
-export const contextValueStateMachine = 'awsStateMachineNode'
+/* note: re-exporting StateMachineNode */
+export { StateMachineNode } from './stateMachineNode'
 
 const sfnNodeMap = new Map<string, StepFunctionsNode>()
 
@@ -42,7 +41,7 @@ export class StepFunctionsNode extends AWSTreeNodeBase {
         public override readonly regionCode: string,
         private readonly client = new StepFunctionsClient(regionCode)
     ) {
-        super('Step Functions', vscode.TreeItemCollapsibleState.Collapsed)
+        super('Step Fynctions', vscode.TreeItemCollapsibleState.Collapsed)
         this.stateMachineNodes = new Map<string, StateMachineNode>()
         this.contextValue = 'awsStepFunctionsNode'
         sfnNodeMap.set(regionCode, this)
@@ -74,52 +73,7 @@ export class StepFunctionsNode extends AWSTreeNodeBase {
             this.stateMachineNodes,
             functions.keys(),
             (key) => this.stateMachineNodes.get(key)!.update(functions.get(key)!),
-            (key) => makeStateMachineNode(this, this.regionCode, functions.get(key)!)
+            (key) => new StateMachineNode(this, this.regionCode, functions.get(key)!)
         )
     }
-}
-
-export class StateMachineNode extends AWSTreeNodeBase implements AWSResourceNode {
-    public constructor(
-        public readonly parent: AWSTreeNodeBase,
-        public override readonly regionCode: string,
-        public details: StepFunctions.StateMachineListItem
-    ) {
-        super('')
-        this.update(details)
-        this.iconPath = getIcon('aws-stepfunctions-preview')
-    }
-
-    public update(details: StepFunctions.StateMachineListItem): void {
-        this.details = details
-        this.label = this.details.name || ''
-        this.tooltip = `${this.details.name}${os.EOL}${this.details.stateMachineArn}`
-    }
-
-    public get functionName(): string {
-        return this.details.name || ''
-    }
-
-    public get arn(): string {
-        return this.details.stateMachineArn || ''
-    }
-
-    public get name(): string {
-        if (this.details.name === undefined) {
-            throw new Error('name expected but not found')
-        }
-
-        return this.details.name
-    }
-}
-
-function makeStateMachineNode(
-    parent: AWSTreeNodeBase,
-    regionCode: string,
-    details: StepFunctions.StateMachineListItem
-): StateMachineNode {
-    const node = new StateMachineNode(parent, regionCode, details)
-    node.contextValue = contextValueStateMachine
-
-    return node
 }
