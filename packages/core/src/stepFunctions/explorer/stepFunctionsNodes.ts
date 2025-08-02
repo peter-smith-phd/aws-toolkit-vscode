@@ -16,9 +16,10 @@ import { makeChildrenNodes } from '../../shared/treeview/utils'
 import { toArrayAsync, toMap, updateInPlace } from '../../shared/utilities/collectionUtils'
 import { listStateMachines } from '../../stepFunctions/utils'
 import { StateMachineNode } from './stateMachineNode'
+import { StateMachineExecutionNode } from './stateMachineExecutionNode'
 
-/* note: re-exporting StateMachineNode */
-export { StateMachineNode } from './stateMachineNode'
+/* re-export symbols so that callers only need to import one file */
+export { StateMachineNode, StateMachineExecutionNode }
 
 const sfnNodeMap = new Map<string, StepFunctionsNode>()
 
@@ -41,7 +42,7 @@ export class StepFunctionsNode extends AWSTreeNodeBase {
         public override readonly regionCode: string,
         private readonly client = new StepFunctionsClient(regionCode)
     ) {
-        super('Step Fynctions', vscode.TreeItemCollapsibleState.Collapsed)
+        super('Step Functions', vscode.TreeItemCollapsibleState.Collapsed)
         this.stateMachineNodes = new Map<string, StateMachineNode>()
         this.contextValue = 'awsStepFunctionsNode'
         sfnNodeMap.set(regionCode, this)
@@ -73,7 +74,7 @@ export class StepFunctionsNode extends AWSTreeNodeBase {
             this.stateMachineNodes,
             functions.keys(),
             (key) => this.stateMachineNodes.get(key)!.update(functions.get(key)!),
-            (key) => new StateMachineNode(this, this.regionCode, functions.get(key)!)
+            (key) => new StateMachineNode(this, this.regionCode, functions.get(key)!, this.client)
         )
     }
 }

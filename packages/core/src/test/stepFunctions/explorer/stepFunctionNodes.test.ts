@@ -52,7 +52,7 @@ describe('StepFunctionsNode', function () {
             assert.ok(node instanceof StateMachineNode, 'Expected child node to be StateMachineNode')
             assert.strictEqual(
                 node.contextValue,
-                StateMachineNode.contextValueStateMachine,
+                StateMachineNode.contextValue,
                 'expected the node to have a State Machine contextValue'
             )
         }
