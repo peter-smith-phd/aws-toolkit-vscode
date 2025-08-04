@@ -435,32 +435,11 @@
                     "fontCharacter": "\\f1e2"
                 }
             },
-            "aws-stepfunctions-execution-failed": {
-                "description": "AWS Contributed Icon",
-                "default": {
-                    "fontPath": "./resources/fonts/aws-toolkit-icons.woff",
-                    "fontCharacter": "\\f1e3"
-                }
-            },
-            "aws-stepfunctions-execution-running": {
-                "description": "AWS Contributed Icon",
-                "default": {
-                    "fontPath": "./resources/fonts/aws-toolkit-icons.woff",
-                    "fontCharacter": "\\f1e4"
-                }
-            },
-            "aws-stepfunctions-execution-success": {
-                "description": "AWS Contributed Icon",
-                "default": {
-                    "fontPath": "./resources/fonts/aws-toolkit-icons.woff",
-                    "fontCharacter": "\\f1e5"
-                }
-            },
             "aws-stepfunctions-preview": {
                 "description": "AWS Contributed Icon",
                 "default": {
                     "fontPath": "./resources/fonts/aws-toolkit-icons.woff",
-                    "fontCharacter": "\\f1e6"
+                    "fontCharacter": "\\f1e3"
                 }
             }
         }
